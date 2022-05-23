@@ -8,7 +8,7 @@ const uri = process.env.MOVIEREVIEWS_DB_URI;
 
 const client = new mongodb.MongoClient(uri);
 
-const port = process.env.PORT||5000;
+const port = process.env.PORT||8000;
 
 
 async function main(){
@@ -24,4 +24,4 @@ async function main(){
         process.exit(1)
     }
 }
-main();
+main().catch(console.error);
