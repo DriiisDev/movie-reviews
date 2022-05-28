@@ -11,6 +11,7 @@ export default class ReviewsController{
                 _id: req.body.user_id
             }
             const date = new Date()
+            
             const ReviewResponse = await ReviewsDAO.addReview(
                 movieId,
                 userInfo,
@@ -23,7 +24,7 @@ export default class ReviewsController{
         }
     }
 
-    static async apiUpdateView(req, res, next){
+    static async apiUpdateReview(req, res, next){
         try {
             const reviewId = req.body.review_id
             const review = req.body.review
@@ -33,7 +34,7 @@ export default class ReviewsController{
                 reviewId,
                 req.body.user_id,
                 review,
-                date
+                date,
             )
 
             var {error} = ReviewResponse
@@ -63,3 +64,4 @@ export default class ReviewsController{
         }
     }
 }
+
