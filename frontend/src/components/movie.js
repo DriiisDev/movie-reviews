@@ -2,8 +2,8 @@ import React from 'react'
 
 const Movie = () => {
   return (
-    <div className='app'>
-        movie
+    <div>
+        <h1>movie</h1>
     </div>
   )
 }

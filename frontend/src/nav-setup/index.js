@@ -14,27 +14,25 @@ const Nav = () => {
         <Router>
             <Navbar/>
             <Routes>
-                <Route exact path={["/", "/movies"]}>
-                    <MovieList></MovieList>
-                </Route>
+                <Route exact path={'/'} element={<MovieList/>}/>
                 <Route path='/movies/:id/review' render={
                     function (props) {
                         return(
-                            <AddReview {...props} login={user}/>
+                            <AddReview {...props}/>
                         );
                     }
                 }/>
                 <Route path='/movies/:id/' render={
                     function (props) {
                         return(
-                            <Movie {...props} login={user}/>
+                            <Movie {...props}/>
                         );
                     }
                 }/>
                 <Route path='/login' render={
                     function (props) {
                         return(
-                            <Login {...props} login={login}/>
+                            <Login {...props}/>
                         );
                     }
                 }/>
