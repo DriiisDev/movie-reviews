@@ -1,5 +1,6 @@
 import React, {useState, useEffect} from 'react'
 import MovieDataService from "../services/movie"
+import { Link } from 'react-router-dom'
 
 const MovieList = (props) => {
   const [movies, setMovies] = useState([])
@@ -10,8 +11,6 @@ const MovieList = (props) => {
   useEffect(()=>{
     retrieveMovies()
     retrieveRatings()
-    // onChangeSearchTitle()
-    onChangeSearchRating()
   },[])
 
   const retrieveMovies = () =>{
@@ -37,15 +36,6 @@ const MovieList = (props) => {
     })
   }
 
-  // const onChangeSearchTitle = (e) =>{
-  //   const searchTitle = e.target.value;
-  //   setSearchTitle(searchTitle);
-  // }
-
-  const onChangeSearchRating = (e) =>{
-    setSearchRating(searchRating);
-  }
-
   const find = (query, by)=>{
     MovieDataService.find(query, by)
     .then((response)=>{
@@ -58,7 +48,9 @@ const MovieList = (props) => {
   }
 
   const findByTitle= ()=>{
-    find(searchTitle, "title")
+    return(
+      find(searchTitle, "title")
+    );
   }
 
   const findByRating =()=>{
@@ -77,13 +69,41 @@ const MovieList = (props) => {
               const searchTitle = e.target.value;
               setSearchTitle(searchTitle);
             }}/>
-            <button type='button' onClick={findByTitle}>search</button>
+            <button type='button' onClick={findByTitle()}>search</button>
           </div>
+
           <div>
-            <input type='text' placeholder='search by title' value={searchRating} onChange={onChangeSearchRating}/>
+            <select onChange={(e)=>{
+                const searchRating = e.target.value;
+                setSearchRating(searchRating);
+              }}>{ratings.map((rating)=>{
+                return(
+                  <option key={rating.toString()} value={rating}>{rating}</option>
+                );
+              })}
+            </select>
             <button type='button' onClick={findByRating}>search</button>
           </div>
         </form>
+        <div>
+          {movies.map((movie)=>{
+            return(
+              <div className="card" key={movie._id}>
+                <div className="card-container">
+                  <div className='card-img'>
+                    <img src={movie.poster+"/100px180"} alt=""/>
+                  </div>
+                  <div className="card-body">
+                    <h1>{movie.title}</h1>
+                    <h2>Rating:{movie.rated}</h2>
+                    <p>{movie.plot}</p>
+                    <Link to={"/movies/"+movie._id}>View Review</Link>
+                  </div>
+                </div>
+              </div>
+            );
+          })}
+        </div>
     </div>
   )
 }
