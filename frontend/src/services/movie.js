@@ -10,8 +10,8 @@ class MovieDataService{
         return axios.get(`http://localhost:5000/api/v1/movies/id/${id}`)
     }
 
-    find(query, by="title", page=0){
-        return axios.get(`http://localhost:5000/api/v1/movies?{by}=${query}&page={page}`)
+    filter(query, by="title", page=0){
+        return axios.get(`http://localhost:5000/api/v1/movies?${by}=${query}&page=${page}`)
     }
 
     createReview(data){
@@ -30,4 +30,4 @@ class MovieDataService{
         return axios.get("http://localhost:5000/api/v1/movies/ratings")
     }
 }
-export default new MovieDataService()
+export default new MovieDataService();

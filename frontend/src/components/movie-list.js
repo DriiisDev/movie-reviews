@@ -8,11 +8,6 @@ const MovieList = (props) => {
   const [searchRating, setSearchRating] = useState("")
   const [ratings, setRatings] = useState(["All Ratings"])
 
-  useEffect(()=>{
-    retrieveMovies()
-    retrieveRatings()
-  },[])
-
   const retrieveMovies = () =>{
     MovieDataService.getAll()
     .then((response)=>{
@@ -23,7 +18,7 @@ const MovieList = (props) => {
       console.log(e);
     })
   }
-
+  
   const retrieveRatings = () =>{
     MovieDataService.getRatings()
     .then((response)=>{
@@ -35,9 +30,14 @@ const MovieList = (props) => {
       console.log(e);
     })
   }
+  
+  useEffect(()=>{
+    retrieveMovies();
+    retrieveRatings();
+  },[])
 
   const find = (query, by)=>{
-    MovieDataService.find(query, by)
+    MovieDataService.filter(query,by)
     .then((response)=>{
       console.log(response.data);
       setMovies(response.data.movies)
@@ -69,7 +69,7 @@ const MovieList = (props) => {
               const searchTitle = e.target.value;
               setSearchTitle(searchTitle);
             }}/>
-            <button type='button' onClick={findByTitle()}>search</button>
+            <button type='button' onClick={findByTitle}>search</button>
           </div>
 
           <div>

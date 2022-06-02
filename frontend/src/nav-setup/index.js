@@ -22,13 +22,9 @@ const Nav = () => {
                         );
                     }
                 }/>
-                <Route path='/movies/:id/' render={
-                    function (props) {
-                        return(
-                            <Movie {...props}/>
-                        );
-                    }
-                }/>
+                <Route path='/movies/:id/' render={({props})=>{
+                    <Movie {...props} />
+                }}/>
                 <Route path='/login' render={
                     function (props) {
                         return(
