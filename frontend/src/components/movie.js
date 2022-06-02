@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import MovieDataService from '../services/movie'
-import { Link } from 'react-router-dom'
+import { Link, useParams} from 'react-router-dom'
 
 const Movie = (props) => {
 
@@ -21,10 +21,12 @@ const Movie = (props) => {
       console.log(e);
     })
   }
-
+  
+  let {id} = useParams();
+  
   useEffect(()=>{
-    getMovie(props.match.params.id)
-  },[props.match.params.id]) //won't call getMovie Multiple times unless id is updated.
+    getMovie(id)
+  },[id]) //won't call getMovie Multiple times unless id is updated.
 
   return (
     <div>

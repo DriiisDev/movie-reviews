@@ -22,9 +22,7 @@ const Nav = () => {
                         );
                     }
                 }/>
-                <Route path='/movies/:id/' render={({props})=>{
-                    <Movie {...props} />
-                }}/>
+                <Route path='/movies/:id/' element={<Movie />} />
                 <Route path='/login' render={
                     function (props) {
                         return(
