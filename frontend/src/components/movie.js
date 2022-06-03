@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import MovieDataService from '../services/movie'
-import { Link, useParams} from 'react-router-dom'
+import { Link } from 'react-router-dom'
+import moment from 'moment'
 
 const Movie = (props) => {
 
@@ -22,11 +23,9 @@ const Movie = (props) => {
     })
   }
   
-  let {id} = useParams();
-  
   useEffect(()=>{
-    getMovie(id)
-  },[id]) //won't call getMovie Multiple times unless id is updated.
+    getMovie(props.id)
+  },[props.id]) //won't call getMovie Multiple times unless id is updated.
 
   return (
     <div>
@@ -47,7 +46,7 @@ const Movie = (props) => {
           return(
             <div className="comment">
               <div className="comment-container">
-                <h3>{review.name + "reviewed on" + review.date}</h3>
+                <h3>{review.name + "reviewed on"}{moment(review.date).format("Do MMMM YYYY")}</h3>
                 <p>{review.review}</p>
                 {props.users && props.user.id === review.user_id && <div>
                   <Link 

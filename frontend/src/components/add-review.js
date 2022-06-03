@@ -1,9 +1,57 @@
-import React from 'react'
+import React, {useState} from 'react'
+import MovieDataService from '../services/movie'
+import {Link} from "react-router-dom"
 
-const AddReview = () => {
+const AddReview = (props) => {
+
+  let editing = false
+  let initialReviewState = ""
+
+  const [review, setReview] = useState(initialReviewState)
+  // keeps track if review is submitted
+
+  const [submitted, setSubmitted] = useState(false)
+
+  const onChangeReview = (e) =>{
+    const review = e.target.value
+    setReview(review)
+  }
+
+  const saveReview = () =>{
+    var data = {
+      review: review,
+      name: props.user.name,
+      user_id: props.user.id,
+      movie_id: props.match.params.id
+      //get movie id direct from url
+    }
+    
+    MovieDataService.createReview(data)
+    .then((response)=>{
+      setSubmitted(true)
+    })
+    .catch((e)=>{
+      console.log(e);
+    })
+  }
   return (
     <div>
-        add-review
+        {submitted?
+          (
+            <div>
+              <h2>Review submitted successfully</h2>
+              <Link to={"/movies/"+ props.match.params.id} ></Link>
+            </div>
+          ):(
+            <div>
+              <form>
+                <label htmlFor="name">{editing? "Edit":"Create"} Review</label>
+                <input type="text" required value={review} onChange={onChangeReview} />
+                <button onClick={saveReview}>Submit</button>
+              </form>
+            </div>
+          )
+        }
     </div>
   )
 }
