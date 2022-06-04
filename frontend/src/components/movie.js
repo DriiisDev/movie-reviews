@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from 'react'
 import MovieDataService from '../services/movie'
-import { Link } from 'react-router-dom'
+import { Link, useParams } from 'react-router-dom'
 import moment from 'moment'
 
 const Movie = (props) => {
-
+  console.log("this prop is", props);
+  const {id, user} = useParams();
+  console.log(id, user);
   const [movie, setMovie] = useState({
     id:null,
     title: "",
@@ -22,14 +24,29 @@ const Movie = (props) => {
       console.log(e);
     })
   }
+
+  const deleteReview = (reviewId, index) =>{
+    MovieDataService.deleteReview(reviewId, props.user.id)
+    .then((response)=>{
+      setMovie((prevState)=>{
+        prevState.reviews.splice(index, 1)
+        return({
+          ...prevState
+        })
+      })
+    })
+    .catch((e)=>{
+      console.log(e);
+    })
+  }
   
   useEffect(()=>{
-    getMovie(props.id)
-  },[props.id]) //won't call getMovie Multiple times unless id is updated.
+    getMovie(id)
+  },[id]) //won't call getMovie Multiple times unless id is updated.
 
   return (
     <div>
-      <div className="card-container">
+      <div className="card-container" key={movie._id}>
         <div className='card-img'>
           <img src={movie.poster+"/100px250"} alt=""/>
         </div>
@@ -52,7 +69,7 @@ const Movie = (props) => {
                   <Link 
                     to={{pathname: "/movies/" + props.match.params.id+"/review", state:{currentReview:review}}}
                     >Edit</Link>
-                    <button>Delete</button>
+                    <button onClick={()=>deleteReview(review._id, index)}>Delete</button>
                   </div>}
               </div>
             </div>

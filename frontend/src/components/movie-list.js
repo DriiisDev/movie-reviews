@@ -8,11 +8,22 @@ const MovieList = () => {
   const [searchRating, setSearchRating] = useState("")
   const [ratings, setRatings] = useState(["All Ratings"])
 
+  const [currentPage, setCurrentPage] = useState(0)
+  const [entriesPerPage, setEntriesPerPage] = useState(0)
+  const [currentSearchMode, setCurrentSearchMode] = useState("")
+
+  useEffect(()=>{
+    setCurrentPage(0)
+  },[currentSearchMode])
+
   const retrieveMovies = () =>{
-    MovieDataService.getAll()
+    setCurrentSearchMode("")
+    MovieDataService.getAll(currentPage)
     .then((response)=>{
       console.log(response.data);
       setMovies(response.data.movies)
+      setCurrentPage(response.data.page)
+      setEntriesPerPage(response.data.entries_per_page)
     })
     .catch((e)=>{
       console.log(e);
@@ -32,12 +43,21 @@ const MovieList = () => {
   }
   
   useEffect(()=>{
-    retrieveMovies();
-    retrieveRatings();
-  },[])
+    retrieveNextPage()
+  },[currentPage])
+
+  const retrieveNextPage = () =>{
+    if (currentSearchMode === "findByTitle") {
+      findByTitle()
+    } else if (currentSearchMode === "findByRating"){
+      findByRating()
+    }else{
+      retrieveMovies()
+    }
+  }
 
   const find = (query, by)=>{
-    MovieDataService.filter(query,by)
+    MovieDataService.filter(query,by,currentPage)
     .then((response)=>{
       console.log(response.data);
       setMovies(response.data.movies)
@@ -48,12 +68,12 @@ const MovieList = () => {
   }
 
   const findByTitle= ()=>{
-    return(
+      setCurrentSearchMode("findByTitle")
       find(searchTitle, "title")
-    );
   }
 
   const findByRating =()=>{
+    setCurrentSearchMode("findByRating")
     if (searchRating === "All Ratings") {
       retrieveMovies()
     }else{
@@ -88,6 +108,7 @@ const MovieList = () => {
         <div>
           {movies.map((movie)=>{
             return(
+              <div>
               <div className="card" key={movie._id}>
                 <div className="card-container">
                   <div className='card-img'>
@@ -100,6 +121,9 @@ const MovieList = () => {
                     <Link to={"/movies/"+movie._id}>View Review</Link>
                   </div>
                 </div>
+              </div>
+              <span>page:{currentPage}</span>
+              <button onClick={()=>{setCurrentPage(currentPage + 1)}}>next{entriesPerPage}</button>
               </div>
             );
           })}

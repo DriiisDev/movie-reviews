@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
 // react router
-import { BrowserRouter as Router, Routes, Route, Link, useParams} from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route, Link} from "react-router-dom";
 
 
 import AddReview from "../components/add-review"
@@ -9,9 +9,9 @@ import Movie from "../components/movie"
 import Login from "../components/login"
 
 const Nav = () => {
-    let {props} =useParams();
 
     const [user, setUser] = useState(null)
+
     const login = (user = null)=>{
         setUser(user)
     }
@@ -41,9 +41,10 @@ const Nav = () => {
             </div>
             <Routes>
                 <Route exact path={'/'} element={<MovieList />}/>
-                <Route path='/movies/:id/review' element={<AddReview {...props} user={user}/>}/>
-                <Route path='/movies/:id/' element={<Movie {...props} user={user}/>} />
-                <Route path='/login' element={<Login {...props} login={login}/>}/>
+                <Route path='/movies' element={<MovieList/>}/>
+                <Route path='/movies/:id/review' element={<AddReview user={user}/>}/>
+                <Route path='/movies/:id/' element={<Movie user={user}/>} />
+                <Route path='/login' element={<Login login={login}/>}/>
             </Routes>
         </Router>
     );
